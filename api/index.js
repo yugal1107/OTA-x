@@ -56,9 +56,9 @@ app.get('/profile', (req,res)=>{
   }
 })
 
-app.post("/login/user", async (req,res)=>{
-  try{
-    const {username, password, role} = req.body;
+app.post("/login/user", async (req, res) => {
+  try {
+    const { username, password, role } = req.body;
     const foundUser = await UserModel.findOne({ username, role });
 
     if (!foundUser) {
@@ -70,23 +70,23 @@ app.post("/login/user", async (req,res)=>{
       return res.status(401).json({ error: "Incorrect password" });
     }
 
-    jwt.sign({userId:foundUser._id, username, role: foundUser.role}, jwtSecret, {}, (err,token)=>{
+    jwt.sign({ userId: foundUser._id, username, role: foundUser.role }, jwtSecret, {}, (err, token) => {
       if (err) throw err;
-        res.cookie("token", token, {sameSite:"none", secure:true}).status(201).json({
-          id: foundUser._id,
-          role: foundUser.role,
-        })
-      }); 
+      res.cookie("token", token, { sameSite: "none", secure: true }).status(201).json({
+        id: foundUser._id,
+        role: foundUser.role,
+      })
+    });
   }
-  catch(err){
+  catch (err) {
     console.error("Login error:", err);
     next(err);
   }
 })
 
-app.post("/login/admin", async (req,res)=>{
-  try{
-    const {username, password, role} = req.body;
+app.post("/login/admin", async (req, res) => {
+  try {
+    const { username, password, role } = req.body;
     const foundUser = await UserModel.findOne({ username, role });
 
     if (!foundUser) {
@@ -98,85 +98,150 @@ app.post("/login/admin", async (req,res)=>{
       return res.status(401).json({ error: "Incorrect password" });
     }
 
-    console.log('Input Password:', password);
-    console.log('Stored Password Hash:', foundUser.password);
-    console.log('Password Comparison Result:', passOK);
+    // console.log('Input Password:', password);
+    // console.log('Stored Password Hash:', foundUser.password);
+    // console.log('Password Comparison Result:', passOK);
 
-    jwt.sign({userId:foundUser._id, username, role: foundUser.role}, jwtSecret, {}, (err,token)=>{
+    jwt.sign({ userId: foundUser._id, username, role: foundUser.role }, jwtSecret, {}, (err, token) => {
       if (err) throw err;
-        res.cookie("token", token, {sameSite:"none", secure:true}).status(201).json({
-          id: foundUser._id,
-          role: foundUser.role,
-        })
-      }); 
+      res.cookie("token", token, { sameSite: "none", secure: true }).status(201).json({
+        id: foundUser._id,
+        role: foundUser.role,
+      })
+    });
   }
-  catch(err){
+  catch (err) {
     console.error("Login error:", err);
     next(err);
   }
 })
 
-app.post("/register/user", async(req,res)=>{
-  try{
-    const {username, password, role} = req.body;
+app.post("/login/driver", async (req, res) => {
+  try {
+    const { username, password, role } = req.body;
+    const foundUser = await UserModel.findOne({ username, role });
+
+    if (!foundUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const passOK = await bcrypt.compare(password, foundUser.password);
+    if (!passOK) {
+      return res.status(401).json({ error: "Incorrect password" });
+    }
+
+    // console.log('Input Password:', password);
+    // console.log('Stored Password Hash:', foundUser.password);
+    // console.log('Password Comparison Result:', passOK);
+
+    jwt.sign({ userId: foundUser._id, username, role: foundUser.role }, jwtSecret, {}, (err, token) => {
+      if (err) throw err;
+      res.cookie("token", token, { sameSite: "none", secure: true }).status(201).json({
+        id: foundUser._id,
+        role: foundUser.role,
+      })
+    });
+  }
+  catch (err) {
+    console.error("Login error:", err);
+    next(err);
+  }
+})
+
+app.post("/register/user", async (req, res) => {
+  try {
+    const { username, password, role } = req.body;
     console.log(req.body);
     // Check if the user already exists
-    const existingUser = await UserModel.findOne({ username, role });
+    const existingUser = await UserModel.findOne({ username, role: 'user' });
 
     if (existingUser) {
       // User is already registered
       return res.status(400).json({ error: "User already registered. Try logging in." });
     }
 
-      const hashedPassword = bcrypt.hashSync(password, bcryptSalt);
-      
-      const createUser = await UserModel.create({
-          username: username, 
-          password: hashedPassword,
-          role: role || 'user',
-      });
+    const hashedPassword = bcrypt.hashSync(password, bcryptSalt);
 
-      jwt.sign({userId:createUser._id, username, role: createUser.role}, jwtSecret, {}, (err,token)=>{
-          if (err) throw err;
-          res.cookie("token",token, {sameSite: "none", secure:true}).status(201).json({
-              id: createUser._id,
-              role: createUser.role,
-          });
-      })
-  }catch(err){
+    const createUser = await UserModel.create({
+      username: username,
+      password: hashedPassword,
+      role: role || 'user',
+    });
+
+    jwt.sign({ userId: createUser._id, username, role: 'user' }, jwtSecret, {}, (err, token) => {
+      if (err) throw err;
+      res.cookie("token", token, { sameSite: "none", secure: true }).status(201).json({
+        id: createUser._id,
+        role: createUser.role,
+      });
+    });
+  } catch (err) {
     console.error("Error during registration:", err);
     res.status(500).json({ error: "Internal server error. Please try again later." });
   }
-})
+});
 
-app.post("/register/admin", async(req,res)=>{  
-  try{
-    const {username, password, role} = req.body;
+app.post("/register/admin", async (req, res) => {
+  try {
+    const { username, password, role } = req.body;
     console.log(req.body);
     // Check if the user already exists
-    const existingUser = await UserModel.findOne({ username, role });
+    const existingUser = await UserModel.findOne({ username, role: 'admin' });
 
     if (existingUser) {
       // User is already registered
       return res.status(400).json({ error: "User already registered. Try logging in." });
     }
 
-      const hashedPassword = bcrypt.hashSync(password, bcryptSalt);
-      
-      const createUser = await UserModel.create({
-          username: username, 
-          password: hashedPassword,
-          role: role || 'user',
-      });
+    const hashedPassword = bcrypt.hashSync(password, bcryptSalt);
 
-      jwt.sign({userId:createUser._id, username, role: createUser.role}, jwtSecret, {}, (err,token)=>{
-          if (err) throw err;
-          res.cookie("token",token, {sameSite: "none", secure:true}).status(201).json({
-              id: createUser._id,
-              role: createUser.role,
-          });
-      })
-  }catch(err){
+    const createAdmin = await UserModel.create({
+      username: username,
+      password: hashedPassword,
+      role: role || 'admin',
+    });
+
+    jwt.sign({ userId: createAdmin._id, username, role: 'admin' }, jwtSecret, {}, (err, token) => {
+      if (err) throw err;
+      res.cookie("token", token, { sameSite: "none", secure: true }).status(201).json({
+        id: createAdmin._id,
+        role: createAdmin.role,
+      });
+    });
+  } catch (err) {
+    console.error("Error during registration:", err);
+    res.status(500).json({ error: "Internal server error. Please try again later." });
+  }
+});
+
+app.post("/register/driver", async (req, res) => {
+  try {
+    const { username, password, role } = req.body;
+    console.log(req.body);
+    // Check if the user already exists
+    const existingUser = await UserModel.findOne({ username, role: 'driver' });
+
+    if (existingUser) {
+      // User is already registered
+      return res.status(400).json({ error: "User already registered. Try logging in." });
+    }
+
+    const hashedPassword = bcrypt.hashSync(password, bcryptSalt);
+
+    const createDriver = await UserModel.create({
+      username: username,
+      password: hashedPassword,
+      role: role || 'driver',
+    });
+
+    jwt.sign({ userId: createDriver._id, username, role: 'driver' }, jwtSecret, {}, (err, token) => {
+      if (err) throw err;
+      res.cookie("token", token, { sameSite: "none", secure: true }).status(201).json({
+        id: createDriver._id,
+        role: createDriver.role,
+      });
+    })
+  } catch (err) {
     console.error("Error during registration:", err);
     res.status(500).json({ error: "Internal server error. Please try again later." });
   }
