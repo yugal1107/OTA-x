@@ -51,7 +51,7 @@ npm install yarn
 ```
 Run the backend 
 ```bash
-yarn start
+yarn dev
 ```
 
 ## Include Credits 

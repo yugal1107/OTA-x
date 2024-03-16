@@ -6,8 +6,12 @@ import Emptymap from "./UserEmptyMap";
 
 function UserHome() {
   const [trackingId, setTrackingId] = useState("");
+<<<<<<< HEAD
   const [data, setData] = useState(null)
   // const [track, setTrack] = useState("")
+=======
+  const [data , setData] = useState(null);
+>>>>>>> 0082b891a4288f4f9f21dc14e2d1fed886def59b
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -16,7 +20,8 @@ function UserHome() {
       const { data } = await axios.post(`/user-dashboard/track`, {
         trackingId,
       });
-      setData(data)
+      setData(data);
+      console.log(data);
       // Handle the response data as needed
       console.log("hello", data);
     } catch (err) {

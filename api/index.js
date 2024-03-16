@@ -11,7 +11,7 @@ import { DriverModel, generateDriverId} from "./models/Driver.js";
 import axios from "axios";
 
 const app = express();
-const port = 4040;
+const port = process.env.PORT || 4040;
 const bcryptSalt = bcrypt.genSaltSync(10);
 
 dotenv.config();
@@ -219,21 +219,73 @@ app.post("/register/admin", async (req, res) => {
   }
 });
 
+// app.post("/register/driver", async (req, res) => {
+//   try {
+//     const { username, password, role } = req.body;
+//     console.log(req.body);
+//     // Check if the user already exists
+//     const existingUser = await UserModel.findOne({ username, role: 'driver' });
+
+//     if (existingUser) {
+//       // User is already registered
+//       return res.status(400).json({ error: "User already registered. Try logging in." });
+//     }
+
+//     // Generate a new driver ID
+//     const driverId = await generateDriverId();
+//     console.log("driverid : ", driverId);
+//     const hashedPassword = bcrypt.hashSync(password, bcryptSalt);
+
+//     const createDriver = await UserModel.create({
+//       username: username,
+//       password: hashedPassword,
+//       role: role || 'driver',
+//     });
+
+//     // Save the new driver record with the generated driver ID
+//     const newDriver = new DriverModel({
+//       driverId,
+//       name: username,
+//       location: {
+//         type: "Point",
+//         coordinates: [] // Default coordinates
+//       }
+//     });
+
+//     await newDriver.save();
+
+//     // Return the driverID in the response
+//     res.status(201).json({ driverId });
+
+//     jwt.sign({ userId: createDriver._id, username, role: 'driver' }, jwtSecret, {}, (err, token) => {
+//       if (err) throw err;
+//       res.cookie("token", token, { sameSite: "none", secure: true }).status(201).json({
+//         id: createDriver._id,
+//         role: createDriver.role,
+//         driverId
+//       });
+//     })
+//   } catch (err) {
+//     console.error("Error during registration:", err);
+//     res.status(500).json({ error: "Internal server error. Please try again later." });
+//   }
+// })
+// var driverId;
 app.post("/register/driver", async (req, res) => {
   try {
     const { username, password, role } = req.body;
     console.log(req.body);
+
     // Check if the user already exists
     const existingUser = await UserModel.findOne({ username, role: 'driver' });
-
     if (existingUser) {
-      // User is already registered
       return res.status(400).json({ error: "User already registered. Try logging in." });
     }
 
     // Generate a new driver ID
     const driverId = await generateDriverId();
-    console.log("driverid : ")
+    console.log("driverid : ", driverId);
+
     const hashedPassword = bcrypt.hashSync(password, bcryptSalt);
 
     const createDriver = await UserModel.create({
@@ -254,19 +306,27 @@ app.post("/register/driver", async (req, res) => {
 
     await newDriver.save();
 
+    // Sign JWT token
     jwt.sign({ userId: createDriver._id, username, role: 'driver' }, jwtSecret, {}, (err, token) => {
-      if (err) throw err;
+      if (err) {
+        console.error("Error signing JWT token:", err);
+        return res.status(500).json({ error: "Error signing JWT token" });
+      }
+
+      // Return the driver ID and token in the response
       res.cookie("token", token, { sameSite: "none", secure: true }).status(201).json({
         id: createDriver._id,
         role: createDriver.role,
-        driverId
+        // driverId,
+        token
       });
-    })
+
+    });
   } catch (err) {
     console.error("Error during registration:", err);
-    res.status(500).json({ error: "Internal server error. Please try again later." });
+    res.status(500).json({ error: err.message || "Internal server error. Please try again later." });
   }
-})
+});
 
 // For extracting Username
 app.use((req, res, next) => {
@@ -288,6 +348,15 @@ app.use((req, res, next) => {
   } else {
     res.status(401).json("No token");
   }
+});
+
+app.get("/register/driver", async (req, res) => {
+  const { username } = req;
+  console.log(username);
+  const driver = await DriverModel.findOne({name: username});
+  console.log("driverid : ", driver.driverId);
+  // res.json(driver.driverId);
+  res.json({ driverId: driver.driverId });
 });
 
 app.get("/admin-dashboard", async (req, res) => {
@@ -334,12 +403,16 @@ app.post("/admin-dashboard/submit", async (req, res) => {
 app.post("/user-dashboard/track", async (req, res) => {
   try {
     const { trackingId } = req.body;
+    console.log(trackingId);
 
     if (!trackingId) {
       return res.status(400).json({ error: "Tracking ID is required" });
     }
 
-    const driver = await HubModel.findOne({ trackingIds: trackingId }).exec();
+    // const driver = await HubModel.findOne({ trackingIds: trackingId }).exec();
+    const driver = await HubModel.findOne({ trackingIds: { $in: [trackingId] } }).exec();
+
+    console.log(driver);
 
     if (!driver) {
       return res.status(404).json({ error: "Driver not found for the provided tracking ID" });
@@ -352,12 +425,14 @@ app.post("/user-dashboard/track", async (req, res) => {
     }
 
     const driverLocation = await DriverModel.findOne({ driverId });
+    console.log(driverLocation);
 
     if (!driverLocation) {
       return res.status(404).json({ error: "Driver location not found" });
     }
 
     const driverCoordinates = driverLocation.location.coordinates;
+    console.log(driverLocation);
 
     res.status(200).json({ driverId, driverCoordinates });
   } catch (error) {
@@ -366,13 +441,35 @@ app.post("/user-dashboard/track", async (req, res) => {
   }
 });
 
+// Make a reverse geocoding request to obtain address information
+// const apiKey = 'e2d7d69da1a0480296746e251cffc5db'; // Replace with your Geoapify API key
+// const apiUrl = `https://api.geoapify.com/v1/geocode/reverse?lat=${driverCoordinates[1]}&lon=${driverCoordinates[0]}&apiKey=${apiKey}`;
+// const response = await axios.get(apiUrl);
 
+// // Extract address information from the response
+// const address = response.data.features[0].properties;
+// console.log(address);
+// // Construct the response with driver information and address
+// const responseData = {
+//   driverId,
+//   driverCoordinates,
+//   address
+// };
+
+// res.status(200).json(responseData);
+// } catch (error) {
+// console.error("Error fetching driver information:", error);
+// res.status(500).json({ error: "Internal Server Error" });
+// }
+// });
+
+// app.get("/user-dashboard/track", async (req, res) => {});
 
 //Driver
 
 app.post("/driver-dashboard/location", async (req, res) => {
   const { driverId, latitude, longitude, name } = req.body;
-  console.log(longitude, latitude)
+  console.log(longitude, latitude);
 
   try {
     let driver = await DriverModel.findOne({ driverId });
