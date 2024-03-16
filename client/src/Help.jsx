@@ -58,16 +58,14 @@ function Help() {
             tabindex="3"
           >
             <div className="flex cursor-pointer items-center justify-between text-2xl">
-              <span> 3. What shipping carriers does OTA'x support?</span>
+              <span> 3. How can I provide feedback or suggestions for OTA'x?</span>
               <img
                 src="https://upload.wikimedia.org/wikipedia/commons/9/96/Chevron-icon-drop-down-menu-WHITE.png"
                 className="h-2 w-3 transition-all duration-500 group-focus:-rotate-180"
               />
             </div>
             <div className="invisible h-auto max-h-0 items-center opacity-0 text-xl transition-all group-focus:visible group-focus:max-h-screen group-focus:opacity-100 group-focus:duration-1000">
-              OTA'x supports a wide range of shipping carriers, including but
-              not limited to FedEx, UPS, DHL, USPS, and more. You can track
-              orders from various carriers all within the OTA'x platform.
+              OTA'x values your feedback and suggestions for improving our platform. You can share your thoughts with us through our website or contact our customer support team directly. We're always striving to enhance the user experience based on your input.
             </div>
           </div>
 
