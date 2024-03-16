@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import Navbar from "./Navbar";
 import Footer from "./Footer";
 import ProfileCards from "./ProfileCards";
 
@@ -33,8 +32,6 @@ function About() {
   ];
   return (
     <>
-      <Navbar />
-
       <div className="flex items-center justify-center flex-col lg:mx-32 lg:my-16 py-6 lg:rounded-3xl border-2 border-black shadow-2xl">
         <div className="flex items-center justify-center h-16 w-full text-black font-bold text-3xl ">
           <p>About Us</p>
@@ -110,8 +107,6 @@ function About() {
           ))}
         </div>
       </div>
-
-      <Footer />
     </>
   );
 }

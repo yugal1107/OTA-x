@@ -5,7 +5,6 @@ import Footer from "./Footer";
 function Help() {
   return (
     <>
-    <Navbar/>
       <div className="flex items-center flex-wrap justify-center gap-32 mb-20 lg:m-20">
         <div>
           <p className="text-2xl font-bold text-center">FAQ's</p>
@@ -194,7 +193,6 @@ function Help() {
           </div>
         </div>
       </section>
-      <Footer/>
     </>
   );
 }
