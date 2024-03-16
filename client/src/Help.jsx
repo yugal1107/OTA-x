@@ -17,7 +17,7 @@ function Help() {
         </div>
         <div className="m-2 space-y-5 w-[90%] lg:w-1/2">
           <div
-            className="group flex flex-col gap-2 rounded-lg bg-cyan-900 p-5 text-white"
+            className="group flex flex-col gap-2 rounded-lg bg-blue-800  p-5 text-white"
             tabindex="1"
           >
             <div className="flex cursor-pointer items-center justify-between text-2xl">
@@ -35,7 +35,7 @@ function Help() {
           </div>
 
           <div
-            className="group flex flex-col gap-2 rounded-lg bg-cyan-900 p-5 text-white"
+            className="group flex flex-col gap-2 rounded-lg bg-blue-800  p-5 text-white"
             tabindex="2"
           >
             <div className="flex cursor-pointer items-center justify-between text-2xl">
@@ -55,7 +55,7 @@ function Help() {
           </div>
 
           <div
-            className="group flex flex-col gap-2 rounded-lg bg-cyan-900 p-5 text-white"
+            className="group flex flex-col gap-2 rounded-lg bg-blue-800  p-5 text-white"
             tabindex="3"
           >
             <div className="flex cursor-pointer items-center justify-between text-2xl">
@@ -68,12 +68,12 @@ function Help() {
             <div className="invisible h-auto max-h-0 items-center opacity-0 text-xl transition-all group-focus:visible group-focus:max-h-screen group-focus:opacity-100 group-focus:duration-1000">
               OTA'x supports a wide range of shipping carriers, including but
               not limited to FedEx, UPS, DHL, USPS, and more. You can track
-              orders from various carriers all within the OTA'x platform.
+              orders from various carriers all within the OTA'x platform.
             </div>
           </div>
 
           <div
-            className="group flex flex-col gap-2 rounded-lg bg-cyan-900 p-5 text-white"
+            className="group flex flex-col gap-2 rounded-lg bg-blue-800 p-5 text-white"
             tabindex="4"
           >
             <div className="flex cursor-pointer items-center justify-between text-2xl">
@@ -90,28 +90,28 @@ function Help() {
               If you encounter any issues with your order or have questions
               about the tracking information provided on OTA'x, you can reach
               out to our customer support team for assistance. We're here to
-              help resolve any concerns you may have.
+              help resolve any concerns you may have.
             </div>
           </div>
         </div>
       </div>
 
       {/* +++++++ Contact Us+++++++++++++ */}
-      <section class="bg-white dark:bg-cyan-900">
+      <section class="bg-gray-900 ">
         <div class="container px-6 py-8 mx-auto">
           <div class="text-center">
-            <p class="font-medium text-blue-500 text-2xl dark:text-blue-400">
+            <p class="font-medium text-2xl text-blue-400">
               Contact us
             </p>
 
-            <p class="mt-3 text-gray-500 text-lg dark:text-gray-400">
+            <p class="mt-3 text-lg text-gray-400">
               Don't be a stranger. Ask us. 
             </p>
           </div>
 
           <div class="grid grid-cols-1 gap-12 mt-10 md:grid-cols-2 lg:grid-cols-3">
             <div class="flex flex-col items-center justify-center text-center">
-              <span class="p-3 text-blue-500 rounded-full bg-blue-100/80 dark:bg-gray-800">
+              <span class="p-3 text-blue-500 rounded-full bg-blue-100/80 bg-gray-800">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -128,15 +128,15 @@ function Help() {
                 </svg>
               </span>
 
-              <h2 class="mt-4 text-lg font-medium text-gray-800 dark:text-white">
+              <h2 class="mt-4 text-lg font-medium text-white">
                 Mail Us
               </h2>
 
-              <p class="mt-2 text-blue-500 dark:text-blue-400">abc@gmail.com</p>
+              <p class="mt-2 text-blue-500">otaxtrack@gmail.com</p>
             </div>
 
             <div class="flex flex-col items-center justify-center text-center">
-              <span class="p-3 text-blue-500 rounded-full bg-blue-100/80 dark:bg-gray-800">
+              <span class="p-3 text-blue-500 rounded-full bg-blue-100/80 bg-gray-800">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -158,17 +158,17 @@ function Help() {
                 </svg>
               </span>
 
-              <h2 class="mt-4 text-lg font-medium text-gray-800 dark:text-white">
+              <h2 class="mt-4 text-lg font-medium text-white">
                 Locate Us
               </h2>
 
-              <p class="mt-2 text-blue-500 dark:text-blue-400">
+              <p class="mt-2 text-blue-500 ">
                 MITS College Gwalior (M.P.)
               </p>
             </div>
 
             <div class="flex flex-col items-center justify-center text-center">
-              <span class="p-3 text-blue-500 rounded-full bg-blue-100/80 dark:bg-gray-800">
+              <span class="p-3 text-blue-500 rounded-full bg-blue-100/80 bg-gray-800">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -185,11 +185,11 @@ function Help() {
                 </svg>
               </span>
 
-              <h2 class="mt-4 text-lg font-medium text-gray-800 dark:text-white">
+              <h2 class="mt-4 text-lg font-medium text-white">
                 Call Us
               </h2>
 
-              <p class="mt-2 text-blue-500 dark:text-blue-400">8976461166</p>
+              <p class="mt-2 text-blue-500 ">+91 9713999175</p>
             </div>
           </div>
         </div>
