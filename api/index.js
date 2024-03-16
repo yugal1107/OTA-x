@@ -1,11 +1,13 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import {UserModel} from "./models/User.js";
+import { UserModel } from "./models/User.js";
 import cors from "cors";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import bcrypt from "bcryptjs";
+import { HubModel } from "./models/Hub.js";
+import { DriverModel } from "./models/Driver.js";
 
 const app = express();
 const port = 4040;
@@ -23,13 +25,14 @@ mongoose.connect(process.env.MONGO_URL)
 
 const jwtSecret = process.env.JWT_SECRET;
 
+app.use(cors({
+  credentials: true,
+  methods:["POST", "GET"],
+  origin: process.env.CLIENT_URL
+}));
+
 app.use(express.json());
 app.use(cookieParser());
-
-app.use(cors({
-    credentials: true,
-    origin: process.env.CLIENT_URL
-}))
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -37,24 +40,25 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal server error' });
 });
 
-app.get("/test", (req,res)=>{
-    res.json("test ok");
-})
+app.get("/test", (req, res) => {
+  res.json("test ok");
+});
 
-app.get('/profile', (req,res)=>{
+app.get('/profile', (req, res) => {
   const token = req.cookies?.token;
-  if(token){
-      jwt.verify(token, jwtSecret, {}, (err, userData)=>{
-        if (err) {
-          console.error('JWT verification error:', err);
-          return res.status(401).json("Invalid token");
-        }
-          res.json(userData);
-      });
-  }else{
-      res.status(401).json("no token")
+  if (token) {
+    jwt.verify(token, jwtSecret, {}, (err, userData) => {
+      if (err) {
+        console.error('JWT verification error:', err);
+        return res.status(401).json("Invalid token");
+      }
+      res.json(userData);
+    });
+  } else {
+    res.status(401).json("no token");
   }
-})
+});
+
 
 app.post("/login/user", async (req, res) => {
   try {
@@ -247,6 +251,135 @@ app.post("/register/driver", async (req, res) => {
   }
 })
 
-app.listen(port, ()=>{
-    console.log(`Listening on the port ${port}`);
-})s
+// For extracting Username
+app.use((req, res, next) => {
+  // Extract the token from the cookie
+  const token = req.cookies?.token;
+
+  if (token) {
+    // Verify the token and extract user data
+    jwt.verify(token, jwtSecret, {}, (err, userData) => {
+      if (err) {
+        console.error('JWT verification error:', err);
+        return res.status(401).json("Invalid token");
+      }
+
+      // Attach the username to the request object
+      req.username = userData.username;
+      next();
+    });
+  } else {
+    res.status(401).json("No token");
+  }
+});
+
+app.get("/admin-dashboard", async (req, res) => {
+  try {
+    // const username = req.body.admin;
+    const { username } = req;
+    console.log(username);
+    // Fetch data from the database (assuming you are using Mongoose)
+    const data = await HubModel.find({ admin: username });
+    // console.log(data);
+    // Send the fetched data as a response
+    res.json(data);
+  } catch (error) {
+    console.error('Error fetching data:', error.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+app.post("/admin-dashboard/submit", async (req, res) => {
+  console.log("submitted");
+  try {
+    const formData = req.body;
+
+    // Create a new driver document using the DriverModel
+    const newHub = await HubModel.create({
+      hub: formData.hub,
+      admin: formData.admin,
+      driverId: formData.driverId,
+      trackingIds: formData.trackingIds,
+    });
+
+    // Send a response indicating success
+    res.status(201).json({ message: "Dilevery Hub added successfully", hub: newHub });
+  } catch (error) {
+    console.error("Error adding Dilevery Hub:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+//User Page
+app.post("/user-dashboard/track", async (req, res) => {
+  try {
+    const { trackingId } = req.body;
+
+    if (!trackingId) {
+      return res.status(400).json({ error: "Tracking ID is required" });
+    }
+
+    const driver = await HubModel.findOne({ trackingIds: trackingId }).exec();
+
+    if (!driver) {
+      return res.status(404).json({ error: "Driver not found for the provided tracking ID" });
+    }
+
+    const { driverId } = driver;
+
+    if (!driverId) {
+      return res.status(404).json({ error: "Driver ID not found for the provided tracking ID" });
+    }
+
+    const driverLocation = await DriverModel.findOne({ driverId });
+
+    if (!driverLocation) {
+      return res.status(404).json({ error: "Driver location not found" });
+    }
+
+    const driverCoordinates = driverLocation.location.coordinates;
+
+    res.status(200).json({ driverId, driverCoordinates });
+  } catch (error) {
+    console.error("Error fetching driver information:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+
+//Driver
+
+app.post("/driver-dashboard/location", async (req, res) => {
+  const { driverId, latitude, longitude, name } = req.body;
+  console.log(longitude, latitude)
+
+  try {
+    let driver = await DriverModel.findOne({ driverId });
+
+    if (!driver) {
+      driver = new DriverModel({
+        driverId,
+        name,
+        location: {
+          type: "Point",
+          coordinates: [longitude, latitude]
+        }
+      });
+    } else {
+      driver.location.coordinates = [longitude, latitude];
+    }
+
+    await driver.save();
+
+    res.status(200).json({ message: "Location updated successfully." });
+  } catch (error) {
+    console.error("Error occurred while updating location:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+})
+
+app.listen(port, () => {
+  console.log(`Listening on the port ${port}`);
+})
