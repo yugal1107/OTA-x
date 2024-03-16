@@ -30,7 +30,7 @@ function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#" class="hover:underline text-lg me-4 md:me-6">
+                <a href="https://www.termsandconditionsgenerator.com/live.php?token=ad0x82fRGXLbZQPeXAY9FdPgAZfL0hXQ" target="__blank" class="hover:underline text-lg me-4 md:me-6">
                   Terms & Conditions
                 </a>
               </li>
@@ -43,7 +43,7 @@ function Footer() {
           </div>
           <hr class="my-4 sm:mx-auto border-gray-700 lg:my-6" />
 
-          <div className="p-4 flex gap-20">
+          <div className="p-4 flex flex-col lg:flex-row gap-20">
             <div>
             <h1 className="text-white text-xl font-bold ">
               Get frequent updates
@@ -68,7 +68,7 @@ function Footer() {
             </div>
             <p className="text-white text-md">
               By subscribing, you agree with our{" "}
-              <span className="text-blue-500">Terms of Service</span> and{" "}
+              <a href="https://www.termsandconditionsgenerator.com/live.php?token=ad0x82fRGXLbZQPeXAY9FdPgAZfL0hXQ" className="text-blue-500">Terms of Service</a> and{" "}
               <span className="text-blue-500">Privacy Policy</span>.
             </p>
             </div>
