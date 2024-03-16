@@ -6,6 +6,7 @@ import About from "./About";
 import Help from "./Help";
 import Footer from "./Footer";
 import PrivacyPolicy from "./PrivacyPolicy";
+import LogoutButton from "./Logout";
 
 export default function AdminDashboard() {
   return (
@@ -16,6 +17,7 @@ export default function AdminDashboard() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Help />} />
         <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
+        <Route path="/logout" element={<LogoutButton />} />
       </Routes>
       <Footer/>
     </Router>

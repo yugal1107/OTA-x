@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import bcrypt from "bcryptjs";
 import { HubModel } from "./models/Hub.js";
 import { DriverModel, generateDriverId} from "./models/Driver.js";
+import axios from "axios";
 
 const app = express();
 const port = 4040;
@@ -401,3 +402,9 @@ app.post("/driver-dashboard/location", async (req, res) => {
 app.listen(port, () => {
   console.log(`Listening on the port ${port}`);
 })
+
+// Add a logout route
+app.get("/logout", (req, res) => {
+  // Clear the token cookie
+  res.clearCookie("token").status(200).json({ message: "Logout successful" });
+});
