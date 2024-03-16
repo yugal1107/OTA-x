@@ -19,7 +19,7 @@ function About() {
       github: "https://github.com/its-AkshatJain",
     },
     {
-      img: "https://images.pexels.com/photos/20015800/pexels-photo-20015800/free-photo-of-a-squirrel-sitting-on-a-tree-branch-with-its-eyes-open.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      img: "./images/yugal.jpg",
       name: "Yugal Burde",
       linkedin: "https://www.linkedin.com/in/yugal-burde-58012a256/",
       github: "https://github.com/yugal1107/",
@@ -85,7 +85,7 @@ function About() {
         <div className="flex items-center justify-center gap-12 rounded-3xl p-8 lg:px-8 w-[90%]  ">
           <img
             className="w-[6rem] h-[6rem] md:w-[12rem] md:h-[12rem]"
-            src="\src\assets\Illus1-removebg-preview.png"
+            src="\src\assets\navigation-concept-illustration_114360-956.png"
             alt=""
           />
           <p className="text-xs sm:text-sm md:text-xl ">
