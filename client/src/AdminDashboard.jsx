@@ -5,6 +5,7 @@ import AdminHome from "./AdminHome";
 import About from "./About";
 import Help from "./Help";
 import Footer from "./Footer";
+import PrivacyPolicy from "./PrivacyPolicy";
 
 export default function AdminDashboard() {
   return (
@@ -14,6 +15,7 @@ export default function AdminDashboard() {
         <Route path="/" exact element={<AdminHome />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Help />} />
+        <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
       </Routes>
       <Footer/>
     </Router>

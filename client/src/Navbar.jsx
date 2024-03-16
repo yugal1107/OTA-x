@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./index.css";
+import { Link } from "react-router-dom";
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -10,7 +11,7 @@ function Navbar() {
 
   return (
     <>
-      <nav className="bg-gray-900 sticky top-0 z-20">
+      <nav className="bg-gray-900 sticky top-0 z-[1200]">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
             <img
@@ -71,7 +72,7 @@ function Navbar() {
             <ul className="flex flex-col gap-7 p-4 md:p-0 mt-4 font-medium md:flex-row md:mt-0 ">
               <li>
                 <Link
-                  to="/home"
+                  to="/"
                   className="block text-xl py-2 px-3 text-gray-100 hover:text-cyan-700 rounded md:bg-transparent md:p-0 "
                   area-current="page"
                 >
@@ -80,7 +81,7 @@ function Navbar() {
               </li>
               <li>
                 <Link
-                  t0="/about"
+                  to="/about"
                   className="block text-xl py-2 px-3 text-gray-100 rounded hover:text-cyan-700 md:p-0 "
                 >
                   About
