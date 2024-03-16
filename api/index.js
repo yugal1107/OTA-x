@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import bcrypt from "bcryptjs";
 import { HubModel } from "./models/Hub.js";
-import { DriverModel } from "./models/Driver.js";
+import { DriverModel, generateDriverId} from "./models/Driver.js";
 
 const app = express();
 const port = 4040;
@@ -230,6 +230,9 @@ app.post("/register/driver", async (req, res) => {
       return res.status(400).json({ error: "User already registered. Try logging in." });
     }
 
+    // Generate a new driver ID
+    const driverId = await generateDriverId();
+    console.log("driverid : ")
     const hashedPassword = bcrypt.hashSync(password, bcryptSalt);
 
     const createDriver = await UserModel.create({
@@ -238,11 +241,24 @@ app.post("/register/driver", async (req, res) => {
       role: role || 'driver',
     });
 
+    // Save the new driver record with the generated driver ID
+    const newDriver = new DriverModel({
+      driverId,
+      name: username,
+      location: {
+        type: "Point",
+        coordinates: [] // Default coordinates
+      }
+    });
+
+    await newDriver.save();
+
     jwt.sign({ userId: createDriver._id, username, role: 'driver' }, jwtSecret, {}, (err, token) => {
       if (err) throw err;
       res.cookie("token", token, { sameSite: "none", secure: true }).status(201).json({
         id: createDriver._id,
         role: createDriver.role,
+        driverId
       });
     })
   } catch (err) {
@@ -301,6 +317,8 @@ app.post("/admin-dashboard/submit", async (req, res) => {
       admin: formData.admin,
       driverId: formData.driverId,
       trackingIds: formData.trackingIds,
+      hubContact: formData.hubContact,
+      nextHub: formData.nextHub
     });
 
     // Send a response indicating success
