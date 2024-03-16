@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from "./Navbar";
 import AdminHome from "./AdminHome";
 import About from "./About";
-import Contact from "./ContactHelp";
+import Help from "./Help";
+import Footer from "./Footer";
 
 export default function AdminDashboard() {
   return (
@@ -12,8 +13,9 @@ export default function AdminDashboard() {
       <Routes>
         <Route path="/" exact element={<AdminHome />} />
         <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
+        <Route path="/contact" element={<Help />} />
       </Routes>
+      <Footer/>
     </Router>
   );
 }

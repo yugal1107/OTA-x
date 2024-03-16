@@ -6,10 +6,11 @@ export default function DriverDashboard() {
   const [name, setName] = useState("");
   const [locationShared, setLocationShared] = useState(false);
   const [intervalId, setIntervalId] = useState(null);
+  const [driverId, setDriverId] = useState("");
   
   const { username, id, role } = useContext(UserContext);
 
-  const driverId = "DID1001";
+  // const driverId = "DID1001";
 
   const shareLocation = () => {
     if (!locationShared) {
@@ -59,7 +60,23 @@ export default function DriverDashboard() {
     }
   };
 
+  // useEffect(() => {
+  //   return () => {
+  //     clearInterval(intervalId);
+  //   };
+  // }, [intervalId]);
+
   useEffect(() => {
+    // Fetch the driver ID when the component mounts
+    axios.get("/driver-dashboard")
+      .then((response) => {
+        console.log(response.data);
+        setDriverId(response.data.driverId);
+      })
+      .catch((error) => {
+        console.error("Error fetching driver ID:", error);
+      });
+
     return () => {
       clearInterval(intervalId);
     };
@@ -83,3 +100,4 @@ export default function DriverDashboard() {
     </div>
   );
 }
+
