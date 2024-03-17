@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./index.css";
 import { Link } from "react-router-dom";
+import LogoutButton from "./Logout";
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,10 +14,10 @@ function Navbar() {
     <>
       <nav className="bg-gray-900 sticky top-0 z-[1200]">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-          <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
+          <a href="#" className="flex items-centersjustify-center space-x-3 rtl:space-x-reverse">
             <img
-              src=""
-              className="h-8"
+              src="./images/logo.png"
+              className="h-20"
               alt=""
             />
             <span className="self-center text-4xl font-semibold whitespace-nowrap text-white">
@@ -73,7 +74,7 @@ function Navbar() {
               <li>
                 <Link
                   to="/"
-                  className="block text-xl py-2 px-3 text-gray-100 hover:text-cyan-700 rounded md:bg-transparent md:p-0 "
+                  className="block text-xl py-2 px-3 text-gray-100 hover:text-blue-400 rounded md:bg-transparent md:p-0 "
                   area-current="page"
                 >
                   Home
@@ -82,7 +83,7 @@ function Navbar() {
               <li>
                 <Link
                   to="/about"
-                  className="block text-xl py-2 px-3 text-gray-100 rounded hover:text-cyan-700 md:p-0 "
+                  className="block text-xl py-2 px-3 text-gray-100 rounded hover:text-blue-400 md:p-0 "
                 >
                   About
                 </Link>
@@ -90,9 +91,17 @@ function Navbar() {
               <li>
                 <Link
                   to="/contact"
-                  className="block text-xl py-2 px-3 text-gray-100 rounded hover:text-cyan-700 md:p-0"
+                  className="block text-xl py-2 px-3 text-gray-100 rounded hover:text-blue-400 md:p-0"
                 >
                   Help
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/logout"
+                  className="block text-xl py-2 px-3 text-blue-400 rounded hover:text-blue-400 md:p-0"
+                >
+                  <LogoutButton />
                 </Link>
               </li>
             </ul>
