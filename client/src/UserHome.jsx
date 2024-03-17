@@ -123,7 +123,7 @@ function UserHome() {
 
             <ol className="flex items-center flex-col">
               <li className="relative w-full mt-8">
-                <h3 className="font-medium text-center text-xl text-gray-90">Prev Hub - <span>hbdcsvjv</span></h3>
+                <h3 className="font-medium text-center text-xl text-gray-90">Prev Hub - <span></span></h3>
                 <div className="flex items-center justify-center flex-col">
                   <div className="z-10 flex items-center justify-center w-10 h-10 bg-blue-200 rounded-full ring-0 ring-white sm:ring-8  shrink-0">
                     <span className="flex w-5 h-5 bg-blue-600 rounded-full"></span>
@@ -137,10 +137,10 @@ function UserHome() {
                     <span className="flex w-5 h-5 bg-blue-600 rounded-full"></span>
                   </div>
                 </div>
-                <h3 className="font-medium text-xl text-center text-gray-900">Next Hub - <span>hbfb</span></h3>
+                <h3 className="font-medium text-xl text-center text-gray-900">Next Hub - <span></span></h3>
               </li>
             </ol>
-            <div className="text-center text-2xl font-bold mt-12 ">Hub name</div>
+            {/* <div className="text-center text-2xl font-bold mt-12 ">Hub name</div> */}
             <div className="text-center text-xl ">Contact No.</div>
           </div>
         </div>
